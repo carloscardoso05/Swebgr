@@ -1,0 +1,14 @@
+
+html {
+  --lumo-primary-text-color: rgb(253, 137, 53);
+  --lumo-primary-color-50pct: rgba(253, 137, 53, 0.5);
+  --lumo-primary-color-10pct: rgba(253, 137, 53, 0.1);
+  --lumo-primary-color: #fd8935;
+}
+
+[theme~="dark"] {
+  --lumo-primary-text-color: rgb(253, 137, 53);
+  --lumo-primary-color-50pct: rgba(253, 137, 53, 0.5);
+  --lumo-primary-color-10pct: rgba(253, 137, 53, 0.1);
+  --lumo-primary-color: #fd8935;
+}
