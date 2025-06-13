@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="projetos_de_projetos" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="02eec36c-f634-4bef-a4fd-c170a7a70761">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Fadesp produção"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="base_dir" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[use fade1;
+select c.TITULO projeto, c.orcamento,
+   'Gestão de Projetos - CGP' as setor
+from CONVENIO c
+         inner join SETOR s on s.CODIGO = c.codSetor
+where s.CODIGO in (2, 206)
+order by setor, c.TITULO]]>
+	</queryString>
+	<field name="projeto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="projeto"/>
+		<property name="com.jaspersoft.studio.field.label" value="projeto"/>
+	</field>
+	<field name="orcamento" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="orcamento"/>
+		<property name="com.jaspersoft.studio.field.label" value="orcamento"/>
+	</field>
+	<field name="setor" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="setor"/>
+		<property name="com.jaspersoft.studio.field.label" value="setor"/>
+	</field>
+	<group name="setor_group" isStartNewPage="true" isReprintHeaderOnEachPage="true" keepTogether="true">
+		<groupExpression><![CDATA[$F{setor}]]></groupExpression>
+		<groupHeader>
+			<band height="72">
+				<frame>
+					<reportElement mode="Opaque" x="0" y="0" width="556" height="71" backcolor="#FD8935" uuid="bd9d57ec-5529-4873-8c34-109cdcd1307d"/>
+					<textField>
+						<reportElement x="0" y="0" width="550" height="40" forecolor="#FFFFFF" uuid="911da371-5917-4b16-840d-c09c3a8ca47e"/>
+						<textElement textAlignment="Center">
+							<font size="19"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{setor}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="0" y="40" width="400" height="32" forecolor="#FFFFFF" uuid="2966eb02-d395-4889-bbf6-4981088f3b01"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Projeto]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="430" y="40" width="120" height="32" forecolor="#FFFFFF" uuid="8751f800-43e4-4de4-ba98-f07cfe5c7234"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Orçamento]]></text>
+					</staticText>
+				</frame>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="112" splitType="Stretch">
+			<image scaleImage="RetainShape" vAlign="Middle" isUsingCache="true" isLazy="true" evaluationTime="Master">
+				<reportElement mode="Opaque" x="480" y="0" width="77" height="102" backcolor="#030303" uuid="5879aaa4-a682-4931-becb-31dcda734672"/>
+				<imageExpression><![CDATA[$P{base_dir} + "/logo vertical branca-compress.jpg"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="476" height="66" backcolor="#000000" uuid="2192d995-a477-427a-90e0-bf23b2d36ebb"/>
+				<staticText>
+					<reportElement x="0" y="0" width="370" height="66" forecolor="#FFFFFF" uuid="22e4fc86-b764-4bc9-a56a-939565192d3d"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Fundação de Amparo e Desenvolvimento da Pesquisa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="0" width="100" height="66" forecolor="#FFFFFF" uuid="42c4d36c-0deb-49b9-bfe8-059de8378cc6"/>
+					<box padding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SETOR DE PROJETOS]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="476" height="32" forecolor="#000000" backcolor="#CC0000" uuid="dc8a527e-9ad3-42dc-9c86-75ba40c5e8f7"/>
+				<staticText>
+					<reportElement x="0" y="5" width="470" height="27" forecolor="#FFFFFF" uuid="12dc9a71-7125-44ba-ba35-7c8724ab8c53"/>
+					<box padding="4"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[PROJETOS POR SETOR]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="554" height="60" uuid="be270712-84cc-4160-a502-47062c013cb4"/>
+				<textField textAdjust="ScaleFont">
+					<reportElement x="0" y="0" width="400" height="60" uuid="65ffd1a5-514e-4fdc-9eb5-9216ecf431d7">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cb64f003-f7e5-4b85-b543-f06dda1f783a"/>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{projeto}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="ScaleFont" pattern="¤#,##0.##;¤-#,##0.##" isBlankWhenNull="true">
+					<reportElement x="430" y="0" width="120" height="60" uuid="47fe2ea9-b7a1-46f4-98df-d3ef8f3d2e9b">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5a0b5cf8-a09e-41b7-9545-1270e49af1f7"/>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{orcamento}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="556" height="25" forecolor="#D0B48E" backcolor="#000000" uuid="db3a17c0-ff8a-46c5-a9fe-eaad5de46473"/>
+				<textField evaluationTime="Report">
+					<reportElement x="515" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="47baf1b7-0bd3-4f7b-954b-54ecd450df8d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="435" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="f3640e11-9f20-41a4-913e-07913c487af0"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="36d845d4-f096-424c-be56-f9f0a40996fa"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

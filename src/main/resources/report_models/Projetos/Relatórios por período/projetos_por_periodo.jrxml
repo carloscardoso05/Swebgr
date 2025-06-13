@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Projetos por período" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="bb6150dc-9a46-4a61-934f-fedb456a0fc8">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Fadesp produção"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="base_dir" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="@data_inicial" class="java.sql.Date"/>
+	<parameter name="@data_final" class="java.sql.Date"/>
+	<queryString>
+		<![CDATA[use fade1;
+select c.TITULO, c.DTVIGENCIAINICIAL, c.DTVIGENCIAFINAL from CONVENIO c
+where c.DTVIGENCIAINICIAL >= $P{@data_inicial}
+and c.DTVIGENCIAFINAL <= $P{@data_final}]]>
+	</queryString>
+	<field name="TITULO" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="TITULO"/>
+		<property name="com.jaspersoft.studio.field.label" value="TITULO"/>
+	</field>
+	<field name="DTVIGENCIAINICIAL" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="DTVIGENCIAINICIAL"/>
+		<property name="com.jaspersoft.studio.field.label" value="DTVIGENCIAINICIAL"/>
+	</field>
+	<field name="DTVIGENCIAFINAL" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="DTVIGENCIAFINAL"/>
+		<property name="com.jaspersoft.studio.field.label" value="DTVIGENCIAFINAL"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="121" splitType="Stretch">
+			<image scaleImage="RetainShape" vAlign="Middle" isUsingCache="true" isLazy="true" evaluationTime="Master">
+				<reportElement mode="Opaque" x="480" y="0" width="77" height="102" backcolor="#030303" uuid="94a7b1fb-4414-443e-985d-5db7b23b3ceb"/>
+				<imageExpression><![CDATA[$P{base_dir} + "/logo vertical branca-compress.jpg"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="476" height="66" backcolor="#000000" uuid="10333d92-3a77-425d-aab2-56a78dc3e337"/>
+				<staticText>
+					<reportElement x="0" y="0" width="370" height="66" forecolor="#FFFFFF" uuid="fe0301ed-3190-4aca-a45b-63d23dd8a98c"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Fundação de Amparo e Desenvolvimento da Pesquisa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="0" width="100" height="66" forecolor="#FFFFFF" uuid="bacb5a41-9d49-4b0a-8cb3-560ea621afde"/>
+					<box padding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SETOR DE PROJETOS]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="476" height="32" forecolor="#000000" backcolor="#CC0000" uuid="5966fbcc-1d3b-4fdf-bc70-3b80502e7033"/>
+				<textField>
+					<reportElement x="2" y="1" width="217" height="30" forecolor="#FFFFFF" uuid="c3dcd7cb-f48e-421f-a409-c083b07f07aa">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<textElement textAlignment="Left">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Projetos com vigência entre"]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="230" y="1" width="79" height="30" forecolor="#FFFFFF" uuid="ed33657b-b428-48fa-9b71-9b9ab38cf5c2"/>
+					<textElement textAlignment="Left">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{@data_inicial}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="315" y="1" width="25" height="30" forecolor="#FFFFFF" uuid="ab1e5b2f-1fb9-41c8-a468-3910194ffff5"/>
+					<textElement textAlignment="Left">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" e "]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="350" y="1" width="79" height="30" forecolor="#FFFFFF" uuid="04b529e8-49be-47e5-a2b6-576a38889cfd"/>
+					<textElement textAlignment="Left">
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{@data_final}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="555" height="30" backcolor="#FD8935" uuid="a0c12517-3c11-4d1e-a018-718b1624f684"/>
+				<staticText>
+					<reportElement x="0" y="0" width="340" height="30" forecolor="#FFFFFF" uuid="0b838616-b035-487a-8b27-694a0fedcefd">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e398ec4-9c5e-44fb-a8f5-f71026e47879"/>
+					</reportElement>
+					<box padding="3"/>
+					<textElement verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Projeto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="455" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="2310eb1a-3272-4b2b-8712-bfa8db4ff979">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="91b8f1f1-7fea-4eef-a2b6-101f9fe67ea0"/>
+					</reportElement>
+					<box padding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Vigência final]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="355" y="0" width="100" height="30" forecolor="#FFFFFF" uuid="decd8712-8936-47ed-9a56-05dac91c1442">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b1e82f99-dcb4-4fe8-8d8d-b6a1f3018ea7"/>
+					</reportElement>
+					<box padding="3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Vigência inicial]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="555" height="40" forecolor="#030303" uuid="e14c66ba-f11f-4452-bddc-e7bba4d99d25"/>
+				<textField textAdjust="ScaleFont">
+					<reportElement x="0" y="0" width="340" height="40" uuid="da3ad9a7-001c-4937-8297-6139fe8c74c5">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7e398ec4-9c5e-44fb-a8f5-f71026e47879"/>
+					</reportElement>
+					<box padding="3"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TITULO}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="355" y="0" width="100" height="40" uuid="ccd8c553-8845-4136-aacc-300b34ce1797">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b1e82f99-dcb4-4fe8-8d8d-b6a1f3018ea7"/>
+					</reportElement>
+					<box padding="3"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DTVIGENCIAINICIAL}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="455" y="0" width="100" height="40" uuid="94e475bd-3ed5-4cf7-b056-076c3eeddc99">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="91b8f1f1-7fea-4eef-a2b6-101f9fe67ea0"/>
+					</reportElement>
+					<box padding="3"/>
+					<textElement textAlignment="Right">
+						<font size="12" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DTVIGENCIAFINAL}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="29" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="4" width="556" height="25" forecolor="#D0B48E" backcolor="#000000" uuid="bb2c91b4-ad28-486a-beed-e2586002d844"/>
+				<textField evaluationTime="Report">
+					<reportElement x="515" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="8886897f-551f-480f-871f-7dac1fe8977a"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="435" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="0a243c6f-18bc-4b2e-8e9f-2fadc1b4df44"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="6c53e27e-347a-421f-bb78-bf6376ca573d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

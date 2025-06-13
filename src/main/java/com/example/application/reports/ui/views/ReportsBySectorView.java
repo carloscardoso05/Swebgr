@@ -2,8 +2,9 @@ package com.example.application.reports.ui.views;
 
 import java.util.Arrays;
 
-import com.example.application.base.ui.components.BigCard;
 import com.example.application.reports.domain.Sector;
+import com.example.application.reports.services.ReportsService;
+import com.example.application.reports.ui.components.SectorCard;
 import com.example.application.statistics.ui.view.StatisticsView;
 import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
@@ -18,7 +19,7 @@ import com.vaadin.flow.router.Route;
 @Route("reports-by-sector")
 public class ReportsBySectorView extends VerticalLayout {
 
-    public ReportsBySectorView() {
+    public ReportsBySectorView(ReportsService reportsService) {
         setSizeFull();
         setAlignItems(Alignment.CENTER);
 
@@ -27,7 +28,8 @@ public class ReportsBySectorView extends VerticalLayout {
         sectorsContainer.setJustifyContentMode(JustifyContentMode.CENTER);
         sectorsContainer.setMaxWidth(80, Unit.PERCENTAGE);
         var sectors = Sector.values();
-        Arrays.stream(sectors).map(sector -> new BigCard(sector.label)).forEach(sectorsContainer::add);
+        Arrays.stream(sectors).map(sector -> new SectorCard(sector, reportsService.getTotalReportsBySector(sector)))
+                .forEach(sectorsContainer::add);
 
         var button = new Button("Voltar para estatísticas", new Icon(VaadinIcon.BAR_CHART_H));
         button.addThemeVariants(ButtonVariant.LUMO_PRIMARY);

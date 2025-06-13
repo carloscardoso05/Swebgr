@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Projetos com situação, data de início e término" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="063d8688-e433-479f-80a7-bece6f2e7d7f">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Fadesp produção"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="base_dir" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[use fade1;
+select c.TITULO projeto, c.DTVIGENCIAINICIAL data_inicial, c.DTVIGENCIAFINAL data_final, s.descricao status
+from CONVENIO c inner join situacaoProjeto s on s.codigo = c.CodSituacaoProjeto
+where c.DELETADO is null or c.DELETADO = 0
+order by s.codigo, c.TITULO]]>
+	</queryString>
+	<field name="projeto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="projeto"/>
+		<property name="com.jaspersoft.studio.field.label" value="projeto"/>
+	</field>
+	<field name="data_inicial" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="data_inicial"/>
+		<property name="com.jaspersoft.studio.field.label" value="data_inicial"/>
+	</field>
+	<field name="data_final" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.name" value="data_final"/>
+		<property name="com.jaspersoft.studio.field.label" value="data_final"/>
+	</field>
+	<field name="status" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="status"/>
+		<property name="com.jaspersoft.studio.field.label" value="status"/>
+	</field>
+	<sortField name="status" order="Descending"/>
+	<variable name="status1" class="java.lang.Integer" resetType="Group" resetGroup="status" calculation="Count">
+		<variableExpression><![CDATA[$F{status}]]></variableExpression>
+	</variable>
+	<group name="status" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{status}]]></groupExpression>
+		<groupHeader>
+			<band height="75">
+				<frame>
+					<reportElement mode="Opaque" x="0" y="1" width="554" height="74" forecolor="#FD8935" backcolor="#FD8935" uuid="8d998eb6-8a38-4b3c-8466-bfa92be233f9"/>
+					<textField>
+						<reportElement x="0" y="0" width="431" height="45" forecolor="#FFFFFF" uuid="22004102-027a-4340-a176-65ade5501c24"/>
+						<textElement verticalAlignment="Middle">
+							<font size="14" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA["SITUAÇÃO: " + $F{status}]]></textFieldExpression>
+					</textField>
+					<textField evaluationTime="Group" evaluationGroup="status">
+						<reportElement x="455" y="0" width="99" height="45" forecolor="#FFFFFF" uuid="69743c50-f989-41d8-97f8-cfd2a7828258"/>
+						<textElement textAlignment="Right" verticalAlignment="Middle">
+							<font size="12" isBold="true"/>
+						</textElement>
+						<textFieldExpression><![CDATA["Quantidade: " + $V{status1}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="10" y="45" width="330" height="30" forecolor="#FFFFFF" uuid="da5c0e16-9418-41b2-91e0-e9e11e2f8119"/>
+						<textElement>
+							<font size="13" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Projeto]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="352" y="45" width="90" height="29" forecolor="#FFFFFF" uuid="2ee963b0-40b6-4d0d-80ee-f8dfe6226edf"/>
+						<textElement textAlignment="Right">
+							<font size="13" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Data de início]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="455" y="45" width="99" height="30" forecolor="#FFFFFF" uuid="1d30632a-e056-4860-a0f8-1976038e910c"/>
+						<textElement textAlignment="Right">
+							<font size="13" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Data de término]]></text>
+					</staticText>
+					<line>
+						<reportElement x="0" y="0" width="554" height="1" uuid="907c63fe-fbd9-49b4-bf48-285f9368d314">
+							<property name="com.jaspersoft.studio.unit.height" value="px"/>
+						</reportElement>
+					</line>
+				</frame>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="102" splitType="Stretch">
+			<image scaleImage="RetainShape" vAlign="Middle" isUsingCache="true" isLazy="true" evaluationTime="Master">
+				<reportElement mode="Opaque" x="480" y="0" width="77" height="102" backcolor="#030303" uuid="2f53d416-c8f0-42f5-bc39-9a3ef4ccfee2"/>
+				<imageExpression><![CDATA[$P{base_dir} + "/logo vertical branca-compress.jpg"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="476" height="66" backcolor="#000000" uuid="531455c6-9616-4a5f-9ff0-5e166e70fdcc"/>
+				<staticText>
+					<reportElement x="0" y="0" width="370" height="66" forecolor="#FFFFFF" uuid="bce8779e-e9d3-4b8a-939a-f4df25d3ccb3"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Fundação de Amparo e Desenvolvimento da Pesquisa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="0" width="100" height="66" forecolor="#FFFFFF" uuid="72e55ede-5218-4ba1-8aba-1c4dc605960c"/>
+					<box padding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SETOR DE PROJETOS]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="476" height="32" forecolor="#000000" backcolor="#CC0000" uuid="c350c19d-aa5e-4e07-a253-e4548600c3a7"/>
+				<staticText>
+					<reportElement x="0" y="5" width="470" height="27" forecolor="#FFFFFF" uuid="8c7b8e06-1f1d-4748-b677-8d8ead6c67be"/>
+					<box padding="4"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[PROJETOS COM SITUAÇÃO, DATA DE INÍCIO E TÉRMINO]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<detail>
+		<band height="59" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="0" y="0" width="554" height="59" forecolor="#FFFFFF" uuid="c0d837ca-6675-4823-8c22-7ecbece56eeb"/>
+				<textField textAdjust="ScaleFont">
+					<reportElement x="10" y="0" width="330" height="59" uuid="0e336cae-d07b-4af0-a20c-c38b107fff76">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7d2bfa92-4460-4a9f-b237-cc3b5832242c"/>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{projeto}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="352" y="0" width="90" height="59" uuid="35d934e2-b447-473e-b9b4-3c58eaf0a8f4">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8d0d6c44-c2d5-4c11-aa25-c81aabe43046"/>
+					</reportElement>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{data_inicial}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement x="455" y="0" width="90" height="59" uuid="3c854d55-b3f4-4047-864a-56a9730ac20a">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f55d802c-4745-4da8-9884-ef8ff48d6499"/>
+					</reportElement>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{data_final}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="29" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="4" width="556" height="25" forecolor="#D0B48E" backcolor="#000000" uuid="550f54d6-af5d-411b-9274-c921de714a2d"/>
+				<textField evaluationTime="Report">
+					<reportElement x="515" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="bc48e923-6bf1-414f-a38f-818def03569d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="435" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="32564f9f-0be8-4fbd-bb55-64f411879d5e"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="ab054854-b6bf-4910-8753-93eca2d638f6"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

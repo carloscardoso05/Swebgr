@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="projetos_de_cdi" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="02eec36c-f634-4bef-a4fd-c170a7a70761">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Fadesp produção"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="base_dir" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[use fade1;
+select c.TITULO projeto, c.orcamento,
+	'Consultoria e Desenvolvimento Institucional - CDI' as setor
+from CONVENIO c
+         inner join SETOR s on s.CODIGO = c.codSetor
+where s.CODIGO in (18, 165)
+order by setor, c.TITULO]]>
+	</queryString>
+	<field name="projeto" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="projeto"/>
+		<property name="com.jaspersoft.studio.field.label" value="projeto"/>
+	</field>
+	<field name="orcamento" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="orcamento"/>
+		<property name="com.jaspersoft.studio.field.label" value="orcamento"/>
+	</field>
+	<field name="setor" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="setor"/>
+		<property name="com.jaspersoft.studio.field.label" value="setor"/>
+	</field>
+	<variable name="projetos_count" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{projeto}]]></variableExpression>
+	</variable>
+	<group name="setor_group" isStartNewPage="true" isReprintHeaderOnEachPage="true" keepTogether="true">
+		<groupExpression><![CDATA[$F{setor}]]></groupExpression>
+		<groupHeader>
+			<band height="42">
+				<frame>
+					<reportElement mode="Opaque" x="1" y="10" width="553" height="31" backcolor="#FD8935" uuid="7451adbf-4d9c-4ddf-b767-4e181a7a152d"/>
+					<staticText>
+						<reportElement x="10" y="2" width="388" height="27" forecolor="#FFFFFF" uuid="2966eb02-d395-4889-bbf6-4981088f3b01"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Projeto]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="429" y="2" width="120" height="27" forecolor="#FFFFFF" uuid="8751f800-43e4-4de4-ba98-f07cfe5c7234"/>
+						<textElement>
+							<font size="12" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Orçamento]]></text>
+					</staticText>
+				</frame>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="122" splitType="Stretch">
+			<image scaleImage="RetainShape" vAlign="Middle" isUsingCache="true" isLazy="true" evaluationTime="Master">
+				<reportElement mode="Opaque" x="480" y="0" width="77" height="102" backcolor="#030303" uuid="5bec9b1b-a250-4b17-b157-1e9c58e228f8"/>
+				<imageExpression><![CDATA[$P{base_dir} + "/logo vertical branca-compress.jpg"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="476" height="66" backcolor="#000000" uuid="e96bc68e-f044-4850-816f-d787ea45019c"/>
+				<staticText>
+					<reportElement x="0" y="0" width="370" height="66" forecolor="#FFFFFF" uuid="cc0a813a-fde7-4814-b61b-650ff7e3a048"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Fundação de Amparo e Desenvolvimento da Pesquisa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="0" width="100" height="66" forecolor="#FFFFFF" uuid="55c993b5-89f8-4c3b-8df8-131136696c93"/>
+					<box padding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SETOR DE CDI]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="476" height="32" forecolor="#000000" backcolor="#CC0000" uuid="2ecb7992-7fb9-4cd0-adc2-8cfa395c17a3"/>
+				<textField textAdjust="ScaleFont" evaluationTime="Master">
+					<reportElement x="260" y="3" width="216" height="25" forecolor="#FFFFFF" uuid="6ba78d5a-9361-4888-a97f-aff2bbf23f0f">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["TOTAL DE PROJETOS: " + $V{projetos_count}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="1" y="1" width="170" height="30" forecolor="#FFFFFF" uuid="ff931116-5bc8-4b06-af4e-cfadf22f307d"/>
+					<box padding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[PROJETOS DE CDI]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="1" y="0" width="553" height="60" uuid="85480e5d-b84b-4692-b3fb-55c96d499fd6"/>
+				<textField textAdjust="ScaleFont">
+					<reportElement x="0" y="0" width="400" height="60" uuid="65ffd1a5-514e-4fdc-9eb5-9216ecf431d7">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cb64f003-f7e5-4b85-b543-f06dda1f783a"/>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{projeto}]]></textFieldExpression>
+				</textField>
+				<textField textAdjust="ScaleFont" pattern="¤#,##0.##;¤-#,##0.##" isBlankWhenNull="true">
+					<reportElement x="430" y="0" width="120" height="60" uuid="47fe2ea9-b7a1-46f4-98df-d3ef8f3d2e9b">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5a0b5cf8-a09e-41b7-9545-1270e49af1f7"/>
+					</reportElement>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{orcamento}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="53" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-1" y="28" width="556" height="25" forecolor="#D0B48E" backcolor="#000000" uuid="352e6618-d5d0-4f54-963b-830133a6f074"/>
+				<textField evaluationTime="Report">
+					<reportElement x="515" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="f7f6c796-aea9-4487-b494-adcdb7d53e11"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="435" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="588fbe27-976d-45a9-9465-907ae47acac7"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="df28482f-082d-4467-b26b-1a2e846121a2"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

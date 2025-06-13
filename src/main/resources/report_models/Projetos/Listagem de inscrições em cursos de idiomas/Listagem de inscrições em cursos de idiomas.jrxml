@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Listagem de inscrições em cursos de idiomas" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9bb7ee28-b544-4093-a573-ecaacab6ecea">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Fadesp produção"/>
+	<parameter name="@status_pagamento" class="java.lang.String">
+		<defaultValueExpression><![CDATA["%"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="@data_inicial" class="java.sql.Date" evaluationTime="Early"/>
+	<parameter name="@data_final" class="java.sql.Date" evaluationTime="Early"/>
+	<parameter name="base_dir" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[use fade1;
+select Curso,
+       Nome,
+       Cpf,
+       Email,
+       Telefone,
+       Celular,
+       Modalidade,
+       Turma
+from (select pes.DESCRICAO          Nome,
+             Case
+                 when mod.Modalidade like '%BOLSA%INTEGRAL%' or ins.Valor > 0 then 'Pago'
+                 else N'Não pago'
+                 end as             status_pagamento,
+             ins.Valor              valor_pago,
+             ins.Matricula          Matricula,
+             pes.CGC_CPF            Cpf,
+             pes.EMAIL              Email,
+             pes.TELEFONE           Telefone,
+             pes.CELULAR            Celular,
+             mod.Modalidade         Modalidade,
+             ins.Motivocancelamento Cancelado,
+             ins.DataCanc           data_de_cancelamento,
+             ins.DataInscricao      data_de_inscricao,
+             tur.descricao          Turma,
+             conv.objeto           Objeto,
+             conv.titulo            Curso
+      from PESSOAS pes
+               inner join InscricaoCursoEvento ins on
+          ins.CodPessoa = pes.CODIGO
+               inner join CursoTurma tur on
+          ins.CodTurma = tur.codigo
+               inner join CONVENIO conv on
+          ins.NumConv = conv.NUMCONV
+               inner join TURMA_MODALIDADEPARTICIPACAO mod on
+          ins.CodModalidade = mod.Codigo) inscricoes
+where data_de_inscricao between {d $P{@data_inicial}} and {d $P{@data_final}}
+  and status_pagamento like $P{@status_pagamento}
+  and Objeto like 'cursos livres%'
+  and Modalidade not like 'cadastro%'
+order by Curso, Turma, Nome]]>
+	</queryString>
+	<field name="Curso" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Curso"/>
+		<property name="com.jaspersoft.studio.field.label" value="Curso"/>
+	</field>
+	<field name="Nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="Nome"/>
+	</field>
+	<field name="Cpf" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Cpf"/>
+		<property name="com.jaspersoft.studio.field.label" value="Cpf"/>
+	</field>
+	<field name="Email" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Email"/>
+		<property name="com.jaspersoft.studio.field.label" value="Email"/>
+	</field>
+	<field name="Telefone" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Telefone"/>
+		<property name="com.jaspersoft.studio.field.label" value="Telefone"/>
+	</field>
+	<field name="Celular" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Celular"/>
+		<property name="com.jaspersoft.studio.field.label" value="Celular"/>
+	</field>
+	<field name="Modalidade" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Modalidade"/>
+		<property name="com.jaspersoft.studio.field.label" value="Modalidade"/>
+	</field>
+	<field name="Turma" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Turma"/>
+		<property name="com.jaspersoft.studio.field.label" value="Turma"/>
+	</field>
+	<group name="Cursos" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{Curso}]]></groupExpression>
+		<groupHeader>
+			<band height="57">
+				<textField textAdjust="StretchHeight">
+					<reportElement x="0" y="0" width="555" height="57" uuid="64e60807-67dc-4ef8-9529-e9cace50d906"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="16"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Curso: " + $F{Curso}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Turmas do curso" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{Curso} + $F{Turma}]]></groupExpression>
+		<groupHeader>
+			<band height="81">
+				<staticText>
+					<reportElement x="463" y="50" width="92" height="31" uuid="6a96d81e-f221-4bf0-ade5-a153e4d37334">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d83ecf48-fa83-43ac-9c9f-fb1d938953ef"/>
+					</reportElement>
+					<box leftPadding="5" bottomPadding="10" rightPadding="5"/>
+					<text><![CDATA[Modalidade]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="50" width="95" height="31" uuid="58d09c13-a240-4079-b2c4-4d20dd15241f">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="58949c2b-49a8-4a2c-b2e4-f56499340178"/>
+					</reportElement>
+					<box leftPadding="5" bottomPadding="10" rightPadding="5"/>
+					<text><![CDATA[Nome]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="187" y="50" width="92" height="31" uuid="6c157e23-e590-4101-ab9d-dc6f2357c4cc">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7abf6cd6-21f3-44ce-b83d-006b80bde493"/>
+					</reportElement>
+					<box leftPadding="5" bottomPadding="10" rightPadding="5"/>
+					<text><![CDATA[Email]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="371" y="50" width="92" height="31" uuid="ea9be6c9-5d54-45bf-9f98-3f97bfe87b0f">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c12dc71c-06bd-4d8f-83ac-de901dfe87ea"/>
+					</reportElement>
+					<box leftPadding="5" bottomPadding="10" rightPadding="5"/>
+					<text><![CDATA[Celular]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="279" y="50" width="92" height="31" uuid="4bcfe4a5-1a46-4ce8-be38-9e880dd1f532">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b6e1917-9def-4b7b-87ef-ac395a3391ea"/>
+					</reportElement>
+					<box leftPadding="5" bottomPadding="10" rightPadding="5"/>
+					<text><![CDATA[Telefone]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="95" y="50" width="92" height="31" uuid="56327b7e-eae8-4c5e-9d41-8701629c916c">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="86110666-cd8b-4197-9caf-6326f85ac0da"/>
+					</reportElement>
+					<box leftPadding="5" bottomPadding="10" rightPadding="5"/>
+					<text><![CDATA[Cpf]]></text>
+				</staticText>
+				<textField textAdjust="StretchHeight">
+					<reportElement x="0" y="2" width="554" height="40" uuid="9574f950-39a0-4646-886b-877044f3d78e"/>
+					<box bottomPadding="10"/>
+					<textElement textAlignment="Center" verticalAlignment="Bottom">
+						<font size="13"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Turma: "+ $F{Turma}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="102" splitType="Stretch">
+			<image scaleImage="RetainShape" vAlign="Middle" isUsingCache="true" isLazy="true" evaluationTime="Master">
+				<reportElement mode="Opaque" x="480" y="0" width="77" height="102" backcolor="#030303" uuid="5cc6cf3d-55f2-4e99-9ead-e5eaebd629d0"/>
+				<imageExpression><![CDATA[$P{base_dir} + "/logo vertical branca-compress.jpg"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="476" height="66" backcolor="#000000" uuid="2bc72cb1-d95f-472c-82e2-422270ec6763"/>
+				<staticText>
+					<reportElement x="0" y="0" width="370" height="66" forecolor="#FFFFFF" uuid="146033db-eda1-4c0a-a9e9-7baef0d28f28"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Fundação de Amparo e Desenvolvimento da Pesquisa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="0" width="100" height="66" forecolor="#FFFFFF" uuid="7d00885a-1b22-4f7b-87fc-ec005bc810dd"/>
+					<box padding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SETOR DE PROJETOS]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="476" height="32" forecolor="#000000" backcolor="#CC0000" uuid="066ab8cb-3d9c-48af-a929-c3c62573a8f4"/>
+				<textField textAdjust="ScaleFont">
+					<reportElement x="0" y="5" width="470" height="27" forecolor="#FFFFFF" uuid="5d840083-80ec-47cf-bb8c-8ca8acb5ee8d"/>
+					<box padding="4"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["LISTAGEM DE INSCRIÇÕES EM CURSOS DE IDIOMAS ENTRE " + $P{@data_inicial} + " E " + $P{@data_final}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="59" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<textField textAdjust="ScaleFont">
+				<reportElement x="0" y="0" width="95" height="59" uuid="ab59c716-9816-4dc8-972b-77dc8f7514d3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="58949c2b-49a8-4a2c-b2e4-f56499340178"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5"/>
+				<textFieldExpression><![CDATA[$F{Nome}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement x="95" y="0" width="92" height="59" uuid="6d47dda7-f450-4cd4-a38a-5850a5c7d142">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="86110666-cd8b-4197-9caf-6326f85ac0da"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5"/>
+				<textFieldExpression><![CDATA[$F{Cpf}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement x="187" y="0" width="92" height="59" uuid="c2ca293b-7b6a-4529-80d8-a2fcf194e34b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="7abf6cd6-21f3-44ce-b83d-006b80bde493"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5"/>
+				<textFieldExpression><![CDATA[$F{Email}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement x="279" y="0" width="92" height="59" uuid="cbb705cc-d816-4714-a278-203da4a34956">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2b6e1917-9def-4b7b-87ef-ac395a3391ea"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5"/>
+				<textFieldExpression><![CDATA[$F{Telefone}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement x="371" y="0" width="92" height="59" uuid="c6092a71-8bab-4233-994c-7224cbb986b5">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c12dc71c-06bd-4d8f-83ac-de901dfe87ea"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5"/>
+				<textFieldExpression><![CDATA[$F{Celular}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="ScaleFont">
+				<reportElement x="463" y="0" width="92" height="59" uuid="2241ed94-f7b1-4492-ad89-1422934b65df">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d83ecf48-fa83-43ac-9c9f-fb1d938953ef"/>
+				</reportElement>
+				<box leftPadding="5" rightPadding="5"/>
+				<textFieldExpression><![CDATA[$F{Modalidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="-1" y="0" width="556" height="25" forecolor="#D0B48E" backcolor="#000000" uuid="bf471188-42ce-42b5-9e2a-49633f584a7e"/>
+				<textField evaluationTime="Report">
+					<reportElement x="515" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="6ddc93b7-d20a-4e82-896b-89ed36903e36"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="435" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="4285841d-d341-46a0-95a0-04880a29c2df"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="7b586bdb-1568-417c-86bb-4bdbca0b5c55"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>

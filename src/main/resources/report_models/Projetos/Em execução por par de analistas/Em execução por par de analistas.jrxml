@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.2.final using JasperReports Library version 6.21.2-8434a0bd7c3bbc37cbf916f2968d35e4b165821a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Em execução por par de analistas" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0371fdb-6aff-40f4-b7f6-6692d4d123d7">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MSSQL"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="base_dir" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[use fade1;
+SELECT Sum(cas.qtd_subdivisoes) - COUNT(*) AS qtd_subprojetos,
+       COUNT(*)                    qtd_projetos,
+       Sum(cas.qtd_subdivisoes) AS qtd_projetos_e_subprojetos,
+       cas.analista_1_cod,
+       cas.analista_1_nome,
+       cas.analista_2_cod,
+       cas.analista_2_nome,
+       Sum(cas.orcamento)          orcamento_total
+FROM (SELECT ca1.codusuario    analista_1_cod,
+             u1.nome           analista_1_nome,
+             ca2.codusuario    analista_2_cod,
+             u2.nome           analista_2_nome,
+             c.exercicio       exercicio,
+             c.orcamento       orcamento,
+             c.qtd_subdivisoes qtd_subdivisoes
+      FROM convassistente ca1
+               INNER JOIN convassistente ca2
+                          ON ca1.numconv = ca2.numconv
+                              AND ca1.codigo <> ca2.codigo
+                              AND ca1.deletado IS NULL
+                              AND ca2.deletado IS NULL
+                              AND ca1.codusuario <= ca2.codusuario
+               INNER JOIN usuario u1
+                          ON u1.codigo = ca1.codusuario
+               INNER JOIN usuario u2
+                          ON u2.codigo = ca2.codusuario
+               INNER JOIN (SELECT c.exercicio,
+                                  c.numconv,
+                                  c.CodSituacaoProjeto,
+                                  COALESCE(c.orcamento, 0) AS orcamento,
+                                  CASE
+                                      WHEN Count(s.codigo) = 0 THEN 1
+                                      ELSE Count(s.codigo)
+                                      END                  AS qtd_subdivisoes
+                           FROM convenio c
+                                    LEFT JOIN subdivisoes s
+                                              ON s.numconv = c.numconv
+                           WHERE c.deletado IS NULL
+                             AND s.deletado IS NULL
+                           GROUP BY c.exercicio,
+                                    c.numconv,
+                                    c.orcamento,
+                                    c.CodSituacaoProjeto) AS c
+                          ON c.numconv = ca1.numconv
+                          AND c.CodSituacaoProjeto = 2
+)cas
+GROUP BY cas.analista_1_cod,
+         cas.analista_1_nome,
+         cas.analista_2_cod,
+         cas.analista_2_nome
+ORDER BY orcamento_total DESC]]>
+	</queryString>
+	<field name="qtd_subprojetos" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="qtd_subprojetos"/>
+		<property name="com.jaspersoft.studio.field.label" value="qtd_subprojetos"/>
+	</field>
+	<field name="qtd_projetos" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="qtd_projetos"/>
+		<property name="com.jaspersoft.studio.field.label" value="qtd_projetos"/>
+	</field>
+	<field name="qtd_projetos_e_subprojetos" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="qtd_projetos_e_subprojetos"/>
+		<property name="com.jaspersoft.studio.field.label" value="qtd_projetos_e_subprojetos"/>
+	</field>
+	<field name="analista_1_cod" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="analista_1_cod"/>
+		<property name="com.jaspersoft.studio.field.label" value="analista_1_cod"/>
+	</field>
+	<field name="analista_1_nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="analista_1_nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="analista_1_nome"/>
+	</field>
+	<field name="analista_2_cod" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="analista_2_cod"/>
+		<property name="com.jaspersoft.studio.field.label" value="analista_2_cod"/>
+	</field>
+	<field name="analista_2_nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="analista_2_nome"/>
+		<property name="com.jaspersoft.studio.field.label" value="analista_2_nome"/>
+	</field>
+	<field name="orcamento_total" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="orcamento_total"/>
+		<property name="com.jaspersoft.studio.field.label" value="orcamento_total"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="116">
+			<image scaleImage="RetainShape" vAlign="Middle" isUsingCache="true" isLazy="true" evaluationTime="Master">
+				<reportElement mode="Opaque" x="480" y="0" width="77" height="102" backcolor="#030303" uuid="73bf06f1-ce26-4c0f-9485-b4ee996bd733"/>
+				<imageExpression><![CDATA[$P{base_dir} + "/logo vertical branca-compress.jpg"]]></imageExpression>
+			</image>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="476" height="66" backcolor="#000000" uuid="ea345dcc-2ce4-4957-a71c-7d89297469c0"/>
+				<staticText>
+					<reportElement x="0" y="0" width="370" height="66" forecolor="#FFFFFF" uuid="b7f1f477-ed14-4f60-b596-5bed85897407"/>
+					<box topPadding="4" leftPadding="4" bottomPadding="4" rightPadding="4"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="Arial" size="22" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Fundação de Amparo e Desenvolvimento da Pesquisa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="360" y="0" width="100" height="66" forecolor="#FFFFFF" uuid="f6d624de-3b4d-4bc9-ae50-f3684ab7c9d8"/>
+					<box padding="4"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[SETOR DE PROJETOS]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="70" width="476" height="32" forecolor="#000000" backcolor="#CC0000" uuid="c10f8d94-12b4-4d23-a77e-b7daca7b2aa5"/>
+				<staticText>
+					<reportElement x="0" y="5" width="420" height="27" forecolor="#FFFFFF" uuid="84e90fab-d468-4b04-b2a9-64f255855335"/>
+					<box padding="4"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="16" isBold="false"/>
+					</textElement>
+					<text><![CDATA[PROJETOS EM EXECUÇÃO POR PAR DE ANALISTAS]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="55">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<frame>
+				<reportElement mode="Opaque" x="1" y="0" width="554" height="50" backcolor="#FD8935" uuid="0280e672-0021-4a2d-8c02-b64d168e5b9f"/>
+				<staticText>
+					<reportElement x="1" y="0" width="169" height="50" forecolor="#FFFFFF" uuid="935368bb-4f5b-4353-bc74-5a9463d8c207">
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement verticalAlignment="Top">
+						<font size="14" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Analistas]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="176" y="0" width="80" height="50" forecolor="#FFFFFF" uuid="d391adfc-09e7-42ce-b53a-fa97791bb48f">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="224762e6-8524-490c-8b08-5b9df24a1793"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[QTD.
+Projetos]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="262" y="0" width="80" height="50" forecolor="#FFFFFF" uuid="ca5f4989-f4d2-4165-bc23-f1398da34fa0">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[QTD. 
+SubProjetos]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="435" y="0" width="118" height="50" forecolor="#FFFFFF" uuid="0e12c8b1-7244-43af-8807-f4a465e954f3"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Valor 
+Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="348" y="0" width="80" height="50" forecolor="#FFFFFF" uuid="4a7cb3d7-805e-4949-9770-8b95068181b2">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font size="12" isBold="true"/>
+					</textElement>
+					<text><![CDATA[QTD. 
+Projetos e
+SubProjetos]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<frame>
+				<reportElement style="Row" mode="Opaque" x="1" y="0" width="553" height="30" uuid="24ff4690-f803-4f95-adb0-941c2a46490f"/>
+				<textField textAdjust="StretchHeight">
+					<reportElement x="0" y="0" width="170" height="20" uuid="a0bee9dd-bccd-4e11-afc7-9a0433a38620"/>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{analista_1_nome} + ($F{analista_1_cod} == $F{analista_2_cod} ? "" : (" e " + $F{analista_2_nome}))]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="176" y="0" width="80" height="20" uuid="effb7d38-b786-41c9-b71f-41b4de795d83">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="224762e6-8524-490c-8b08-5b9df24a1793"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Center">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{qtd_projetos}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="262" y="0" width="80" height="20" uuid="f1973a6a-b0fd-4261-ba3a-2449557f457c">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2fc0f474-d71b-48d0-8c55-e502f585d736"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Center">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{qtd_subprojetos}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;¤-#,##0.00">
+					<reportElement x="436" y="0" width="117" height="20" uuid="e737d0a2-a284-4ade-ad39-8ed1f8a861ac">
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Right">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{orcamento_total}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="348" y="0" width="80" height="20" uuid="374822a8-3c90-4e9b-8b66-d73b23f9cecd">
+						<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2fc0f474-d71b-48d0-8c55-e502f585d736"/>
+						<property name="com.jaspersoft.studio.unit.width" value="px"/>
+						<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					</reportElement>
+					<box leftPadding="5" rightPadding="5"/>
+					<textElement textAlignment="Center">
+						<font size="12"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{qtd_projetos_e_subprojetos}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="35">
+			<line>
+				<reportElement x="0" y="0" width="555" height="1" uuid="3fda99ed-fa59-42b5-b92e-3e4006bb75ee">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<frame>
+				<reportElement mode="Opaque" x="-1" y="10" width="556" height="25" forecolor="#D0B48E" backcolor="#000000" uuid="e3420762-d9de-41bd-87ae-4de99c2b64ff"/>
+				<textField evaluationTime="Report">
+					<reportElement x="515" y="3" width="40" height="20" forecolor="#FFFFFF" uuid="98db13a4-3a30-49a7-ad73-ede9f7f395a0"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="435" y="3" width="80" height="20" forecolor="#FFFFFF" uuid="0fbc2ff4-dd53-4989-8c3c-5af572f77e6e"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+				</textField>
+				<textField pattern="EEEEE dd MMMMM yyyy">
+					<reportElement x="2" y="3" width="197" height="20" forecolor="#FFFFFF" uuid="4b90a78f-9604-4eea-a6f2-fe5f7cc4f03d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</pageFooter>
+</jasperReport>
